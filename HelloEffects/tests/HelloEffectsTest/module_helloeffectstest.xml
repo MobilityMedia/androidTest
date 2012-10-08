@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_helloeffectstest" default="compile.module.helloeffectstest">
+  <dirname property="module.helloeffectstest.basedir" file="${ant.file.module_helloeffectstest}"/>
+  
+  <property name="module.jdk.home.helloeffectstest" value="${jdk.home.android_4.1_platform}"/>
+  <property name="module.jdk.bin.helloeffectstest" value="${jdk.bin.android_4.1_platform}"/>
+  <property name="module.jdk.classpath.helloeffectstest" value="jdk.classpath.android_4.1_platform"/>
+  
+  <property name="compiler.args.helloeffectstest" value="${compiler.args}"/>
+  
+  <property name="helloeffectstest.output.dir" value="${module.helloeffectstest.basedir}/../../out/production/HelloEffectsTest"/>
+  <property name="helloeffectstest.testoutput.dir" value="${module.helloeffectstest.basedir}/../../out/test/HelloEffectsTest"/>
+  
+  <path id="helloeffectstest.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="helloeffectstest.module.production.classpath">
+    <path refid="${module.jdk.classpath.helloeffectstest}"/>
+    <pathelement location="${helloeffects.output.dir}"/>
+  </path>
+  
+  <path id="helloeffectstest.runtime.production.module.classpath">
+    <pathelement location="${helloeffectstest.output.dir}"/>
+  </path>
+  
+  <path id="helloeffectstest.module.classpath">
+    <path refid="${module.jdk.classpath.helloeffectstest}"/>
+    <pathelement location="${helloeffectstest.output.dir}"/>
+    <pathelement location="${helloeffects.testoutput.dir}"/>
+    <pathelement location="${helloeffects.output.dir}"/>
+  </path>
+  
+  <path id="helloeffectstest.runtime.module.classpath">
+    <pathelement location="${helloeffectstest.testoutput.dir}"/>
+    <pathelement location="${helloeffectstest.output.dir}"/>
+    <path refid="helloeffects.runtime.module.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.helloeffectstest">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.helloeffectstest">
+    <patternset refid="compiler.excluded"/>
+    <patternset refid="excluded.from.module.helloeffectstest"/>
+  </patternset>
+  
+  <path id="helloeffectstest.module.sourcepath">
+    <dirset dir="${module.helloeffectstest.basedir}">
+      <include name="src"/>
+      <include name="gen"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.helloeffectstest" depends="compile.module.helloeffectstest.production,compile.module.helloeffectstest.tests" description="Compile module HelloEffectsTest"/>
+  
+  <target name="compile.module.helloeffectstest.production" depends="register.custom.compilers,compile.module.helloeffects" description="Compile module HelloEffectsTest; production classes">
+    <mkdir dir="${helloeffectstest.output.dir}"/>
+    <javac2 destdir="${helloeffectstest.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.helloeffectstest}/javac">
+      <compilerarg line="${compiler.args.helloeffectstest}"/>
+      <bootclasspath refid="helloeffectstest.module.bootclasspath"/>
+      <classpath refid="helloeffectstest.module.production.classpath"/>
+      <src refid="helloeffectstest.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.helloeffectstest"/>
+    </javac2>
+    
+    <copy todir="${helloeffectstest.output.dir}">
+      <fileset dir="${module.helloeffectstest.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+        <patternset refid="excluded.from.compilation.helloeffectstest"/>
+      </fileset>
+      <fileset dir="${module.helloeffectstest.basedir}/gen">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+        <patternset refid="excluded.from.compilation.helloeffectstest"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.helloeffectstest.tests" depends="register.custom.compilers,compile.module.helloeffectstest.production" description="compile module HelloEffectsTest; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.helloeffectstest" description="cleanup module">
+    <delete dir="${helloeffectstest.output.dir}"/>
+    <delete dir="${helloeffectstest.testoutput.dir}"/>
+  </target>
+</project>
