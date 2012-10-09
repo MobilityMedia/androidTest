@@ -6,3 +6,5 @@ gen
 out
 
 .DS_Store
+
+tests/HelloEffectsTest/local.properties
